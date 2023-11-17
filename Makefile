@@ -1,51 +1,60 @@
-# Compiler and flags
-CC = cc
-CFLAGS = -Wall -Wextra -Werror
+#
+# names
+#
+NAME := libftprintf.a
 
-# Project name
-NAME = libftprintf.a
+AR := ar -crs
 
-# Directories
-SRC_DIR = src
-OBJ_DIR = obj
-LIBFT_DIR = ../Libft
-INCLUDE := includes/
+RM := rm -rf
 
-# Source files
-SRC_FILES = ft_print.c \
-            ft_print_format.c
-HFILES := $(INCLUDE)ft_printf.h
+CC := cc
 
-# Object files
-OBJ_FILES = $(SRC_FILES:%.c=$(OBJ_DIR)/%.o)
-
-# External library
-LIBFT = $(LIBFT_DIR)/libft.a
-
-# Targets
-all: $(LIBFT) $(NAME)
-
-$(NAME): $(OBJ_FILES)
-    $(CC) $(CFLAGS) -o $@ $(OBJ_FILES) -L$(LIBFT_DIR) -lft
-
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(HFILES)
-    $(CC) $(CFLAGS) -I$(LIBFT_DIR) -I$(HFILES) -c $< -o $@
-
-$(LIBFT):
-    @make -C $(LIBFT_DIR)
-
-clean:
-    @make -C $(LIBFT_DIR) clean
-    @rm -rf $(OBJ_DIR)
-
-fclean: clean
-    @make -C $(LIBFT_DIR) fclean
-    @rm -f $(NAME)
-
-re: fclean all
+CFLAGS := -Wall -Werror -Wextra
 
 #
 # rules not to mixed with similar file names
 #
+.PHONY: all bonus clean fclean re
 
-.PHONY: all clean fclean re
+#
+# directories
+#
+INCLUDE := includes/
+
+SRCS_DIR := srcs/
+
+#
+# necessary files
+#
+CFILES := ft_print_format.c \
+			ft_print_number.c \
+			ft_print_unsigned_number.c \
+			ft_print_hex.c \
+			ft_print_pointer.c\
+			ft_print_str.c
+HFILES := $(INCLUDE)ft_printf.h
+
+SRCS := $(addprefix $(SRCS_DIR), $(CFILES) ft_print.c)
+
+OBJS := $(SRCS:%.c=%.o)
+
+#
+# rules
+#
+all: $(NAME)
+
+$(NAME): $(OBJS)
+	@echo "Creating library $@ from object files $^"
+	$(AR) $@ $^
+
+%.o: %.c $(HFILES)
+	@echo "Compiling $< to create object file $@"
+	$(CC) $(CFLAGS) -c $< -I$(INCLUDE) -o $@
+
+clean:
+	$(RM) $(sort $(OBJS))
+
+fclean: clean
+	$(RM) $(NAME)
+
+re: fclean all
