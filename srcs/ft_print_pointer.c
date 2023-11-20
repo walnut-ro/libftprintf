@@ -6,61 +6,34 @@
 /*   By: dlevinsc <dlevinsc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/15 17:14:27 by dlevinsc          #+#    #+#             */
-/*   Updated: 2023/11/17 15:13:24 by dlevinsc         ###   ########.fr       */
+/*   Updated: 2023/11/20 15:27:44 by dlevinsc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-/**
-* @notice	This function counts the lenght of a pointer.
-* @param	uintptr_t			The unsigned integer pointer to count lenght.
-* @return	int					The lenght of characters of the pointer.
-*/
-int	ptr_len(uintptr_t num)
+static int	put_ptr(unsigned long long num)
 {
-	int	len;
+	int	i;
 
-	len = 0;
-	while (num != 0)
+	i = 0;
+	if (num < 16)
 	{
-		num /= 16;
-		len++;
+		if (ft_putchar_fd(LHEX[num], 1) < 0)
+			return (-1);
+		return (1);
 	}
-	return (len);
+	i = 1 + put_ptr(num / 16);
+	if (i == 0)
+		return (-1);
+	if (put_ptr(num % 16) < 0)
+		return (-1);
+	return (i);
 }
 
-/**
-* @notice	This function converts a pointer.
-* @param	uintptr_t			The unsigned integer pointer to print.
-* @return	void				No return value needed now.
-*/
-static int	put_ptr(uintptr_t num, int len)
+int	ft_print_pointer(unsigned long int ptr)
 {
-	if (num >= 16)
-	{
-		put_ptr(num / 16, len);
-		put_ptr(num % 16, len);
-	}
-	else
-		write(1, &LHEX[num], 1);
-	return (++len);
-}
-
-/**
-* @notice	This function checks the pointer of something, converts it, prints
-*			it and counts its pointer lenght.
-* @param	unsigned_long_long	The unsigned integer pointer to print.
-* @return	int					The lenght of characters of the printed
-*								pointer.
-*/
-int	ft_print_pointer(unsigned long long ptr)
-{
-	write(1, "0x", 2);
-	if (ptr == 0)
-	{
-		write(1, "0", 1);
-		return (3);
-	}
-	return (put_ptr(ptr, 2));
+	if (ft_print_str("0x") < 0)
+		return (-1);
+	return (2 + put_ptr(ptr));
 }

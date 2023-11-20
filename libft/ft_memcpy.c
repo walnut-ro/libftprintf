@@ -1,35 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_print_unsigned_number.c                         :+:      :+:    :+:   */
+/*   ft_memcpy.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dlevinsc <dlevinsc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/16 21:28:27 by dlevinsc          #+#    #+#             */
-/*   Updated: 2023/11/20 15:30:36 by dlevinsc         ###   ########.fr       */
+/*   Created: 2023/11/06 19:20:01 by dlevinsc          #+#    #+#             */
+/*   Updated: 2023/11/06 19:34:13 by dlevinsc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "libft.h"
 
-int	ft_print_unsigned_number(unsigned int num)
+void	*ft_memcpy(void *dst, const void *src, size_t n)
 {
-	int	i;
+	size_t	i;
 
-	i = 0;
-	if (num / 10)
-	{
-		i = 1 + ft_print_unsigned_number(num / 10);
-		if (i == 0)
-			return (-1);
-		if (ft_putchar_fd(num % 10 + '0', 1) < 0)
-			return (-1);
-	}
-	else
-	{
-		if (ft_putchar_fd(num % 10 + '0', 1) < 0)
-			return (-1);
-		return (1);
-	}
-	return (i);
+	if (!dst && !src)
+		return (NULL);
+	i = -1;
+	while (++i < n)
+		*(char *)(dst + i) = *(char *)(src + i);
+	return (dst);
 }

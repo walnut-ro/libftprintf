@@ -1,35 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_print_unsigned_number.c                         :+:      :+:    :+:   */
+/*   ft_strncmp.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dlevinsc <dlevinsc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/16 21:28:27 by dlevinsc          #+#    #+#             */
-/*   Updated: 2023/11/20 15:30:36 by dlevinsc         ###   ########.fr       */
+/*   Created: 2023/10/26 15:58:14 by dlevinsc          #+#    #+#             */
+/*   Updated: 2023/10/29 17:54:54 by dlevinsc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "libft.h"
 
-int	ft_print_unsigned_number(unsigned int num)
+int	ft_strncmp(const char *s1, const char *s2, size_t n)
 {
-	int	i;
+	size_t	a;
 
-	i = 0;
-	if (num / 10)
+	a = -1;
+	while (++a < n && (s1[a] || s2[a]))
 	{
-		i = 1 + ft_print_unsigned_number(num / 10);
-		if (i == 0)
-			return (-1);
-		if (ft_putchar_fd(num % 10 + '0', 1) < 0)
-			return (-1);
+		if (s1[a] != s2[a])
+			return ((unsigned char) s1[a] - (unsigned char) s2[a]);
 	}
-	else
-	{
-		if (ft_putchar_fd(num % 10 + '0', 1) < 0)
-			return (-1);
-		return (1);
-	}
-	return (i);
+	return (0);
 }

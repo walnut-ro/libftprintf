@@ -1,35 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_print_unsigned_number.c                         :+:      :+:    :+:   */
+/*   ft_lstmap_bonus.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dlevinsc <dlevinsc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/16 21:28:27 by dlevinsc          #+#    #+#             */
-/*   Updated: 2023/11/20 15:30:36 by dlevinsc         ###   ########.fr       */
+/*   Created: 2023/11/05 14:49:27 by dlevinsc          #+#    #+#             */
+/*   Updated: 2023/11/05 14:49:36 by dlevinsc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "libft.h"
 
-int	ft_print_unsigned_number(unsigned int num)
+t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 {
-	int	i;
+	t_list	*res;
+	t_list	*new;
+	void	*set;
 
-	i = 0;
-	if (num / 10)
+	res = NULL;
+	while (lst)
 	{
-		i = 1 + ft_print_unsigned_number(num / 10);
-		if (i == 0)
-			return (-1);
-		if (ft_putchar_fd(num % 10 + '0', 1) < 0)
-			return (-1);
+		set = f(lst->content);
+		new = ft_lstnew(set);
+		if (!new)
+		{
+			del(set);
+			ft_lstclear(&res, (*del));
+			return (res);
+		}
+		ft_lstadd_back(&res, new);
+		lst = lst->next;
 	}
-	else
-	{
-		if (ft_putchar_fd(num % 10 + '0', 1) < 0)
-			return (-1);
-		return (1);
-	}
-	return (i);
+	return (res);
 }

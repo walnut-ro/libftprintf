@@ -1,35 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_print_unsigned_number.c                         :+:      :+:    :+:   */
+/*   ft_strlcat.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dlevinsc <dlevinsc@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/16 21:28:27 by dlevinsc          #+#    #+#             */
-/*   Updated: 2023/11/20 15:30:36 by dlevinsc         ###   ########.fr       */
+/*   Created: 2023/10/26 15:40:04 by dlevinsc          #+#    #+#             */
+/*   Updated: 2023/10/30 19:30:25 by dlevinsc         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "ft_printf.h"
+#include "libft.h"
 
-int	ft_print_unsigned_number(unsigned int num)
+size_t	ft_strlcat(char *dest, const char *src, size_t size)
 {
-	int	i;
+	size_t	dest_len;
+	size_t	src_len;
+	size_t	len;
+	int		i;
 
+	if (size == 0 && !dest)
+		return (size);
+	dest_len = ft_strlen(dest);
+	src_len = ft_strlen(src);
+	len = dest_len;
+	if (size <= dest_len)
+		return (size + src_len);
 	i = 0;
-	if (num / 10)
-	{
-		i = 1 + ft_print_unsigned_number(num / 10);
-		if (i == 0)
-			return (-1);
-		if (ft_putchar_fd(num % 10 + '0', 1) < 0)
-			return (-1);
-	}
-	else
-	{
-		if (ft_putchar_fd(num % 10 + '0', 1) < 0)
-			return (-1);
-		return (1);
-	}
-	return (i);
+	while (src[i] && len < size - 1)
+		dest[len++] = src[i++];
+	dest[len] = 0;
+	return (dest_len + src_len);
 }
